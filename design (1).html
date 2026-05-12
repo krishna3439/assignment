@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krishna | Design Layout</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --accent: #00d4ff;
+    --accent2: #ff6b35;
+    --accent3: #a855f7;
+    --text: #e8e8f0;
+    --muted: #6b6b8a;
+    --border: rgba(255,255,255,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transition: all 0.15s ease;
+    mix-blend-mode: difference;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 24px 60px;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 900;
+    color: var(--text); letter-spacing: -0.5px;
+  }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none; font-size: 13px;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    font-family: 'Space Mono', monospace;
+    transition: color 0.3s; cursor: none;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+
+  /* PAGE HERO */
+  .page-hero {
+    padding: 140px 60px 80px;
+    position: relative; overflow: hidden;
+  }
+  .page-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridShift 20s linear infinite;
+  }
+  @keyframes gridShift {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(60px); }
+  }
+  .orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); pointer-events: none;
+    animation: float 8s ease-in-out infinite;
+  }
+  .orb-1 { width: 350px; height: 350px; background: rgba(168,85,247,0.12); top: -5%; right: 10%; }
+  .orb-2 { width: 250px; height: 250px; background: rgba(255,107,53,0.08); bottom: 5%; left: 5%; animation-delay: -4s; }
+  @keyframes float {
+    0%,100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-30px) scale(1.05); }
+  }
+  .page-hero-content { position: relative; z-index: 2; max-width: 700px; }
+  .hero-tag {
+    display: inline-block;
+    font-family: 'Space Mono', monospace; font-size: 11px;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: var(--accent3); border: 1px solid rgba(168,85,247,0.3);
+    padding: 6px 16px; border-radius: 2px; margin-bottom: 28px;
+    animation: fadeUp 0.8s ease forwards;
+  }
+  .page-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(48px, 6vw, 80px); font-weight: 900;
+    line-height: 0.95; letter-spacing: -2px;
+    margin-bottom: 20px;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+  .page-title .outline {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--accent3);
+  }
+  .page-subtitle {
+    font-size: 15px; color: var(--muted);
+    line-height: 1.8; max-width: 500px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SECTION HEADER */
+  .section-header {
+    display: flex; align-items: center; gap: 24px;
+    margin-bottom: 48px;
+  }
+  .section-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: var(--accent3);
+    letter-spacing: 3px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px; font-weight: 900; letter-spacing: -1px;
+  }
+  .section-line {
+    flex: 1; height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  /* ===== PART 1: COLOR PALETTE ===== */
+  .palette-section {
+    padding: 80px 60px;
+    border-top: 1px solid var(--border);
+  }
+  .palette-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+  }
+  .color-swatch {
+    border-radius: 4px; overflow: hidden;
+    border: 1px solid var(--border);
+    transition: transform 0.3s; cursor: none;
+  }
+  .color-swatch:hover { transform: translateY(-8px); }
+  .swatch-color { height: 120px; }
+  .swatch-info {
+    padding: 16px;
+    background: var(--surface);
+  }
+  .swatch-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: var(--text);
+    margin-bottom: 4px; letter-spacing: 1px;
+  }
+  .swatch-hex {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; color: var(--muted);
+  }
+  .swatch-role {
+    font-size: 11px; color: var(--muted);
+    margin-top: 6px;
+  }
+
+  /* ===== PART 2: TYPOGRAPHY ===== */
+  .typography-section {
+    padding: 80px 60px;
+    border-top: 1px solid var(--border);
+  }
+  .type-showcase {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+  }
+  .type-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 40px;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+  }
+  .type-card:hover { border-color: rgba(168,85,247,0.3); }
+  .type-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--accent3); margin-bottom: 24px;
+  }
+  .type-display {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px; font-weight: 900;
+    line-height: 1; letter-spacing: -2px;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, var(--text), var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .type-mono {
+    font-family: 'Space Mono', monospace;
+    font-size: 20px; font-weight: 700;
+    color: var(--accent3); margin-bottom: 16px;
+    letter-spacing: 2px;
+  }
+  .type-body {
+    font-size: 15px; color: var(--muted); line-height: 1.8;
+  }
+  .type-sizes {
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .type-size-row {
+    display: flex; align-items: baseline; gap: 20px;
+    padding-bottom: 12px; border-bottom: 1px solid var(--border);
+  }
+  .type-size-row:last-child { border-bottom: none; }
+  .size-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; color: var(--muted); width: 70px; flex-shrink: 0;
+  }
+  .size-text { color: var(--text); }
+
+  /* ===== PART 3: WIREFRAME LAYOUT ===== */
+  .wireframe-section {
+    padding: 80px 60px;
+    border-top: 1px solid var(--border);
+  }
+  .wireframe-container {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+  }
+  .wireframe-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: var(--muted); letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 16px;
+    text-align: center;
+  }
+  .wireframe {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Desktop wireframe */
+  .wf-desktop {
+    aspect-ratio: 16/10;
+    padding: 16px;
+  }
+  .wf-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 12px;
+    background: rgba(0,212,255,0.05);
+    border: 1px solid rgba(0,212,255,0.1);
+    border-radius: 3px; margin-bottom: 12px;
+  }
+  .wf-logo { width: 30px; height: 6px; background: var(--accent); border-radius: 2px; opacity: 0.6; }
+  .wf-nav-links { display: flex; gap: 8px; }
+  .wf-nav-link { width: 24px; height: 4px; background: var(--muted); border-radius: 2px; opacity: 0.4; }
+
+  .wf-hero {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    margin-bottom: 12px; height: 100px;
+  }
+  .wf-hero-text { padding: 12px; display: flex; flex-direction: column; gap: 8px; justify-content: center; }
+  .wf-h1 { height: 14px; background: var(--text); opacity: 0.5; border-radius: 2px; }
+  .wf-h1-2 { height: 14px; background: var(--accent); opacity: 0.3; border-radius: 2px; width: 70%; }
+  .wf-p { height: 6px; background: var(--muted); opacity: 0.4; border-radius: 2px; }
+  .wf-p-2 { height: 6px; background: var(--muted); opacity: 0.4; border-radius: 2px; width: 80%; }
+  .wf-btns { display: flex; gap: 6px; margin-top: 8px; }
+  .wf-btn { width: 40px; height: 12px; border-radius: 2px; }
+  .wf-btn.prim { background: var(--accent); opacity: 0.6; }
+  .wf-btn.out { border: 1px solid var(--border); opacity: 0.6; }
+  .wf-hero-visual {
+    background: linear-gradient(135deg, rgba(0,212,255,0.05), rgba(168,85,247,0.05));
+    border: 1px solid var(--border); border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .wf-avatar {
+    width: 50px; height: 50px; border-radius: 50%;
+    background: conic-gradient(var(--accent), var(--accent3), var(--accent));
+    opacity: 0.4;
+  }
+
+  .wf-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+  .wf-card {
+    background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+    border-radius: 3px; padding: 10px; display: flex; flex-direction: column; gap: 5px;
+  }
+  .wf-card-icon { width: 16px; height: 16px; background: var(--accent3); opacity: 0.3; border-radius: 50%; }
+  .wf-card-line { height: 5px; background: var(--muted); opacity: 0.3; border-radius: 2px; }
+
+  /* Mobile wireframe */
+  .wf-mobile {
+    max-width: 200px;
+    aspect-ratio: 9/19;
+    margin: 0 auto;
+    border-radius: 20px;
+    border: 2px solid rgba(0,212,255,0.2);
+    padding: 20px 12px 16px;
+    position: relative;
+  }
+  .wf-mobile::before {
+    content: '';
+    position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+    width: 40px; height: 3px;
+    background: rgba(255,255,255,0.1); border-radius: 2px;
+  }
+  .wf-mob-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 10px;
+  }
+  .wf-mob-logo { width: 20px; height: 4px; background: var(--accent); opacity: 0.6; border-radius: 2px; }
+  .wf-mob-menu { display: flex; flex-direction: column; gap: 2px; }
+  .wf-mob-bar { width: 14px; height: 2px; background: var(--muted); opacity: 0.4; border-radius: 1px; }
+  .wf-mob-hero { margin-bottom: 10px; }
+  .wf-mob-tag { width: 50%; height: 4px; background: var(--accent); opacity: 0.3; border-radius: 2px; margin-bottom: 8px; }
+  .wf-mob-title { height: 10px; background: var(--text); opacity: 0.4; border-radius: 2px; margin-bottom: 5px; }
+  .wf-mob-title-2 { height: 10px; width: 70%; background: var(--accent3); opacity: 0.3; border-radius: 2px; margin-bottom: 8px; }
+  .wf-mob-lines { display: flex; flex-direction: column; gap: 3px; margin-bottom: 8px; }
+  .wf-mob-line { height: 3px; background: var(--muted); opacity: 0.3; border-radius: 1px; }
+  .wf-mob-btn { height: 12px; background: var(--accent); opacity: 0.5; border-radius: 2px; width: 60%; }
+  .wf-mob-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+  .wf-mob-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border); border-radius: 3px;
+    padding: 6px; display: flex; flex-direction: column; gap: 3px;
+  }
+  .wf-mob-card-line { height: 3px; background: var(--muted); opacity: 0.25; border-radius: 1px; }
+
+  /* ===== PART 4: COMPONENT LIBRARY ===== */
+  .components-section {
+    padding: 80px 60px;
+    border-top: 1px solid var(--border);
+  }
+  .components-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+  }
+  .component-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px; overflow: hidden;
+    transition: border-color 0.3s; cursor: none;
+  }
+  .component-card:hover { border-color: rgba(0,212,255,0.2); }
+  .component-preview {
+    padding: 40px 30px;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #0d0d15, #12121f);
+    min-height: 160px;
+  }
+  .component-label {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; color: var(--muted);
+    letter-spacing: 2px; text-transform: uppercase;
+  }
+
+  /* Button demos */
+  .demo-btn-primary {
+    background: var(--accent); color: var(--bg);
+    padding: 12px 28px; font-family: 'Space Mono', monospace;
+    font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+    border: none; cursor: none;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+    transition: all 0.3s;
+  }
+  .demo-btn-secondary {
+    border: 1px solid var(--border); color: var(--text);
+    padding: 12px 28px; font-family: 'Space Mono', monospace;
+    font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+    background: transparent; cursor: none;
+    transition: all 0.3s;
+  }
+  .demo-btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+  .demo-btn-ghost {
+    color: var(--accent3); background: rgba(168,85,247,0.08);
+    border: 1px solid rgba(168,85,247,0.2);
+    padding: 12px 28px; font-family: 'Space Mono', monospace;
+    font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+    cursor: none;
+  }
+  .btn-group { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+
+  /* Nav demo */
+  .demo-nav {
+    background: rgba(18,18,26,0.9);
+    border: 1px solid var(--border); border-radius: 3px;
+    padding: 12px 20px; display: flex;
+    justify-content: space-between; align-items: center;
+    width: 100%;
+  }
+  .demo-nav-logo { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 900; }
+  .demo-nav-logo span { color: var(--accent); }
+  .demo-nav-links { display: flex; gap: 16px; }
+  .demo-nav-link {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    color: var(--muted); letter-spacing: 1px;
+  }
+  .demo-nav-link.active { color: var(--accent); }
+
+  /* Card demo */
+  .demo-card {
+    background: var(--bg); border: 1px solid var(--border);
+    padding: 24px; border-radius: 2px; width: 100%;
+    transition: border-color 0.3s;
+  }
+  .demo-card:hover { border-color: rgba(0,212,255,0.2); }
+  .demo-card-icon { font-size: 24px; margin-bottom: 12px; }
+  .demo-card-title {
+    font-family: 'Playfair Display', serif; font-size: 18px;
+    font-weight: 700; margin-bottom: 8px;
+  }
+  .demo-card-text { font-size: 12px; color: var(--muted); line-height: 1.7; }
+  .demo-tag {
+    display: inline-block;
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.2);
+    color: var(--accent); font-family: 'Space Mono', monospace;
+    font-size: 9px; padding: 4px 8px; letter-spacing: 1px;
+    margin-top: 12px;
+  }
+
+  /* Badge demos */
+  .badge-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .demo-badge {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    padding: 5px 10px; letter-spacing: 1px;
+  }
+  .badge-cyan { border: 1px solid rgba(0,212,255,0.3); color: var(--accent); background: rgba(0,212,255,0.06); }
+  .badge-purple { border: 1px solid rgba(168,85,247,0.3); color: var(--accent3); background: rgba(168,85,247,0.06); }
+  .badge-orange { border: 1px solid rgba(255,107,53,0.3); color: var(--accent2); background: rgba(255,107,53,0.06); }
+
+  /* Input demo */
+  .demo-input-wrap { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+  .demo-input {
+    background: transparent; border: 1px solid var(--border);
+    color: var(--text); font-family: 'DM Sans', sans-serif;
+    font-size: 14px; padding: 12px 16px; outline: none;
+    transition: border-color 0.3s;
+  }
+  .demo-input:focus { border-color: var(--accent); }
+  .demo-input::placeholder { color: var(--muted); font-size: 13px; }
+  .demo-input-label {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    color: var(--accent); letter-spacing: 2px; text-transform: uppercase;
+  }
+
+  /* Stat demo */
+  .demo-stats { display: flex; gap: 24px; }
+  .demo-stat { text-align: center; }
+  .demo-stat-num {
+    font-family: 'Playfair Display', serif; font-size: 36px;
+    font-weight: 900; color: var(--accent); display: block;
+  }
+  .demo-stat-label {
+    font-family: 'Space Mono', monospace; font-size: 9px;
+    color: var(--muted); letter-spacing: 2px; text-transform: uppercase;
+  }
+
+  /* ===== SPACING SECTION ===== */
+  .spacing-section {
+    padding: 80px 60px;
+    border-top: 1px solid var(--border);
+  }
+  .spacing-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 16px; }
+  .spacing-item { text-align: center; }
+  .spacing-box { margin: 0 auto 12px; background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.2); }
+  .spacing-val {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; color: var(--accent); display: block;
+  }
+  .spacing-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px; color: var(--muted);
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 60px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  footer p {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: var(--muted);
+  }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a {
+    font-family: 'Space Mono', monospace; font-size: 11px;
+    color: var(--muted); text-decoration: none;
+    cursor: none; transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--accent); }
+
+  .reveal {
+    opacity: 0; transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px; }
+    .page-hero, .palette-section, .typography-section,
+    .wireframe-section, .components-section, .spacing-section { padding: 60px 24px; }
+    .palette-grid { grid-template-columns: repeat(3,1fr); }
+    .type-showcase { grid-template-columns: 1fr; }
+    .wireframe-container { grid-template-columns: 1fr; }
+    .components-grid { grid-template-columns: 1fr; }
+    .spacing-grid { grid-template-columns: repeat(3,1fr); }
+    footer { flex-direction: column; gap: 16px; padding: 32px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <div class="nav-logo">K<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="design.html" class="active">Design</a></li>
+    <li><a href="projects.html">Projects</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="page-hero-content">
+    <span class="hero-tag">Part 2 — Web Design (UI/UX)</span>
+    <h1 class="page-title">
+      Design<br>
+      <span class="outline">System</span>
+    </h1>
+    <p class="page-subtitle">
+      A visual design layout showcasing the complete UI/UX system behind this portfolio — color palette, typography, wireframes, and component library.
+    </p>
+  </div>
+</section>
+
+<!-- COLOR PALETTE -->
+<section class="palette-section reveal">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Color Palette</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="palette-grid">
+    <div class="color-swatch">
+      <div class="swatch-color" style="background:#0a0a0f;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Background</div>
+        <div class="swatch-hex">#0a0a0f</div>
+        <div class="swatch-role">Base layer</div>
+      </div>
+    </div>
+    <div class="color-swatch">
+      <div class="swatch-color" style="background:#12121a;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Surface</div>
+        <div class="swatch-hex">#12121a</div>
+        <div class="swatch-role">Cards & panels</div>
+      </div>
+    </div>
+    <div class="color-swatch">
+      <div class="swatch-color" style="background:#00d4ff;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Cyan Accent</div>
+        <div class="swatch-hex">#00d4ff</div>
+        <div class="swatch-role">Primary accent</div>
+      </div>
+    </div>
+    <div class="color-swatch">
+      <div class="swatch-color" style="background:#a855f7;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Purple</div>
+        <div class="swatch-hex">#a855f7</div>
+        <div class="swatch-role">Secondary accent</div>
+      </div>
+    </div>
+    <div class="color-swatch">
+      <div class="swatch-color" style="background:#ff6b35;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Orange</div>
+        <div class="swatch-hex">#ff6b35</div>
+        <div class="swatch-role">Highlight / CTA</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TYPOGRAPHY -->
+<section class="typography-section reveal">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Typography</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="type-showcase">
+    <div class="type-card">
+      <div class="type-label">Display Font — Playfair Display</div>
+      <div class="type-display">Krishna</div>
+      <div class="type-mono">SPACE MONO</div>
+      <p class="type-body">Playfair Display brings elegance and weight to headlines. Space Mono adds technical, monospace precision for labels and code elements.</p>
+    </div>
+    <div class="type-card">
+      <div class="type-label">Type Scale</div>
+      <div class="type-sizes">
+        <div class="type-size-row">
+          <span class="size-label">96px / H1</span>
+          <span class="size-text" style="font-family:'Playfair Display',serif;font-size:40px;font-weight:900;letter-spacing:-2px;line-height:1;">Krishna</span>
+        </div>
+        <div class="type-size-row">
+          <span class="size-label">32px / H2</span>
+          <span class="size-text" style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;">Section Title</span>
+        </div>
+        <div class="type-size-row">
+          <span class="size-label">18px / H3</span>
+          <span class="size-text" style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;">Card Heading</span>
+        </div>
+        <div class="type-size-row">
+          <span class="size-label">14px / Body</span>
+          <span class="size-text" style="font-size:14px;color:#6b6b8a;">Paragraph text in DM Sans regular, 1.8 line-height.</span>
+        </div>
+        <div class="type-size-row">
+          <span class="size-label">11px / Label</span>
+          <span class="size-text" style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;color:#00d4ff;">NAV LINK / LABEL</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WIREFRAMES -->
+<section class="wireframe-section reveal">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Wireframes</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="wireframe-container">
+    <!-- Desktop -->
+    <div>
+      <div class="wireframe-label">Desktop Layout — 1440px</div>
+      <div class="wireframe">
+        <div class="wf-desktop">
+          <div class="wf-nav">
+            <div class="wf-logo"></div>
+            <div class="wf-nav-links">
+              <div class="wf-nav-link"></div>
+              <div class="wf-nav-link"></div>
+              <div class="wf-nav-link"></div>
+            </div>
+          </div>
+          <div class="wf-hero">
+            <div class="wf-hero-text">
+              <div class="wf-h1"></div>
+              <div class="wf-h1-2"></div>
+              <div class="wf-p"></div>
+              <div class="wf-p-2"></div>
+              <div class="wf-btns">
+                <div class="wf-btn prim"></div>
+                <div class="wf-btn out"></div>
+              </div>
+            </div>
+            <div class="wf-hero-visual">
+              <div class="wf-avatar"></div>
+            </div>
+          </div>
+          <div class="wf-cards">
+            <div class="wf-card">
+              <div class="wf-card-icon"></div>
+              <div class="wf-card-line"></div>
+              <div class="wf-card-line" style="width:70%"></div>
+            </div>
+            <div class="wf-card">
+              <div class="wf-card-icon"></div>
+              <div class="wf-card-line"></div>
+              <div class="wf-card-line" style="width:60%"></div>
+            </div>
+            <div class="wf-card">
+              <div class="wf-card-icon"></div>
+              <div class="wf-card-line"></div>
+              <div class="wf-card-line" style="width:80%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile -->
+    <div style="display:flex;flex-direction:column;align-items:center;">
+      <div class="wireframe-label">Mobile Layout — 390px</div>
+      <div class="wireframe wf-mobile">
+        <div class="wf-mob-nav">
+          <div class="wf-mob-logo"></div>
+          <div class="wf-mob-menu">
+            <div class="wf-mob-bar"></div>
+            <div class="wf-mob-bar"></div>
+            <div class="wf-mob-bar"></div>
+          </div>
+        </div>
+        <div class="wf-mob-hero">
+          <div class="wf-mob-tag"></div>
+          <div class="wf-mob-title"></div>
+          <div class="wf-mob-title-2"></div>
+          <div class="wf-mob-lines">
+            <div class="wf-mob-line"></div>
+            <div class="wf-mob-line" style="width:90%"></div>
+            <div class="wf-mob-line" style="width:75%"></div>
+          </div>
+          <div class="wf-mob-btn"></div>
+        </div>
+        <div class="wf-mob-cards">
+          <div class="wf-mob-card">
+            <div class="wf-mob-card-line"></div>
+            <div class="wf-mob-card-line" style="width:70%"></div>
+          </div>
+          <div class="wf-mob-card">
+            <div class="wf-mob-card-line"></div>
+            <div class="wf-mob-card-line" style="width:80%"></div>
+          </div>
+          <div class="wf-mob-card">
+            <div class="wf-mob-card-line"></div>
+            <div class="wf-mob-card-line" style="width:60%"></div>
+          </div>
+          <div class="wf-mob-card">
+            <div class="wf-mob-card-line"></div>
+            <div class="wf-mob-card-line" style="width:75%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPONENT LIBRARY -->
+<section class="components-section reveal">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Component Library</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="components-grid">
+
+    <!-- Buttons -->
+    <div class="component-card">
+      <div class="component-preview">
+        <div class="btn-group">
+          <button class="demo-btn-primary">Primary Button</button>
+          <button class="demo-btn-secondary">Secondary Button</button>
+          <button class="demo-btn-ghost">Ghost Button</button>
+        </div>
+      </div>
+      <div class="component-label">Buttons — 3 Variants</div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="component-card">
+      <div class="component-preview">
+        <div class="demo-nav">
+          <div class="demo-nav-logo">K<span>.</span></div>
+          <div class="demo-nav-links">
+            <span class="demo-nav-link active">Home</span>
+            <span class="demo-nav-link">About</span>
+            <span class="demo-nav-link">Projects</span>
+          </div>
+        </div>
+      </div>
+      <div class="component-label">Navigation Bar</div>
+    </div>
+
+    <!-- Card -->
+    <div class="component-card">
+      <div class="component-preview">
+        <div class="demo-card">
+          <div class="demo-card-icon">⬡</div>
+          <div class="demo-card-title">Skill Card</div>
+          <p class="demo-card-text">Building responsive interfaces with modern web technologies.</p>
+          <span class="demo-tag">HTML / CSS / JS</span>
+        </div>
+      </div>
+      <div class="component-label">Skill Card</div>
+    </div>
+
+    <!-- Badges / Tags -->
+    <div class="component-card">
+      <div class="component-preview">
+        <div class="badge-row">
+          <span class="demo-badge badge-cyan">HTML5</span>
+          <span class="demo-badge badge-purple">CSS3</span>
+          <span class="demo-badge badge-orange">JavaScript</span>
+          <span class="demo-badge badge-cyan">C++</span>
+          <span class="demo-badge badge-purple">BCA</span>
+          <span class="demo-badge badge-orange">Design</span>
+        </div>
+      </div>
+      <div class="component-label">Tags & Badges</div>
+    </div>
+
+    <!-- Inputs -->
+    <div class="component-card">
+      <div class="component-preview" style="padding:30px;">
+        <div class="demo-input-wrap">
+          <span class="demo-input-label">Your Name</span>
+          <input class="demo-input" type="text" placeholder="e.g. Krishna Thakur" readonly>
+          <span class="demo-input-label">Email Address</span>
+          <input class="demo-input" type="email" placeholder="hello@example.com" readonly>
+        </div>
+      </div>
+      <div class="component-label">Form Inputs</div>
+    </div>
+
+    <!-- Stats -->
+    <div class="component-card">
+      <div class="component-preview">
+        <div class="demo-stats">
+          <div class="demo-stat">
+            <span class="demo-stat-num">4+</span>
+            <span class="demo-stat-label">Projects</span>
+          </div>
+          <div class="demo-stat">
+            <span class="demo-stat-num">3rd</span>
+            <span class="demo-stat-label">Year</span>
+          </div>
+          <div class="demo-stat">
+            <span class="demo-stat-num">∞</span>
+            <span class="demo-stat-label">Learning</span>
+          </div>
+        </div>
+      </div>
+      <div class="component-label">Stats Strip</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SPACING -->
+<section class="spacing-section reveal">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Spacing Scale</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="spacing-grid">
+    <div class="spacing-item">
+      <div class="spacing-box" style="width:8px;height:8px;"></div>
+      <span class="spacing-val">8px</span>
+      <span class="spacing-name">XS</span>
+    </div>
+    <div class="spacing-item">
+      <div class="spacing-box" style="width:16px;height:16px;"></div>
+      <span class="spacing-val">16px</span>
+      <span class="spacing-name">SM</span>
+    </div>
+    <div class="spacing-item">
+      <div class="spacing-box" style="width:24px;height:24px;"></div>
+      <span class="spacing-val">24px</span>
+      <span class="spacing-name">MD</span>
+    </div>
+    <div class="spacing-item">
+      <div class="spacing-box" style="width:40px;height:40px;"></div>
+      <span class="spacing-val">40px</span>
+      <span class="spacing-name">LG</span>
+    </div>
+    <div class="spacing-item">
+      <div class="spacing-box" style="width:60px;height:60px;"></div>
+      <span class="spacing-val">60px</span>
+      <span class="spacing-name">XL</span>
+    </div>
+    <div class="spacing-item">
+      <div class="spacing-box" style="width:80px;height:80px;"></div>
+      <span class="spacing-val">80px</span>
+      <span class="spacing-name">2XL</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Krishna Thakur — Design System v1.0</p>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="projects.html">Projects</a>
+  </div>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    cursor.style.left = mouseX - 6 + 'px';
+    cursor.style.top = mouseY - 6 + 'px';
+  });
+
+  function animateRing() {
+    ringX += (mouseX - ringX - 18) * 0.12;
+    ringY += (mouseY - ringY - 18) * 0.12;
+    ring.style.left = ringX + 'px';
+    ring.style.top = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  revealEls.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
